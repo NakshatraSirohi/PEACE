@@ -1,0 +1,11 @@
+ffmpeg -hwaccel cuda -ss <start_sec> -to <end_second> -i vid_name.mp4 -an -sn -vf "fps=<number>, crop=width:height:left:top" -threads 2 folder_path/day_%05d.png
+
+
+for kill feed:-
+ffmpeg -hwaccel cuda -ss <start_time> -to <end_time> -i DAY.mp4 -an -sn -r 1 -vf "crop=430:245:1370:55" -threads 2 screenshots/day_%05d.png
+
+ffmpeg -hwaccel cuda -ss <second> -to <second> -i DAY/DAY.mp4 -an -sn -vf "fps=2/3,crop=430:245:1370:55" DAY/screenshots/day_%05d.png
+
+
+for kill banner:-
+ffmpeg -hwaccel cuda -ss <start_time> -to <end_time> -i DAY.mp4 -an -sn -r 1 -vf "crop=296:277:805:719" -threads 2 screenshots/day_%05d.png
