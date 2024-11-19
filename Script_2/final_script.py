@@ -31,7 +31,7 @@ def screenshotting(input_path, outputDir, start_time, end_time):
     print(f'Created: {ss_folder}')
     time.sleep(2)
 
-    fps1 = "2/3"
+    fps = "2/3"
     crop_width = 430
     crop_height = 245
     crop_x = 1370
@@ -40,7 +40,7 @@ def screenshotting(input_path, outputDir, start_time, end_time):
         (
             ffmpeg
             .input(input_path, ss=start_time, to=end_time, hwaccel="cuda")
-            .filter("fps", fps=fps1)
+            .filter("fps", fps=fps)
             .filter("crop", crop_width, crop_height, crop_x, crop_y)
             .output(os.path.join(ss_folder, 'frame_%05d.png'), an=None, sn=None)
             .run()

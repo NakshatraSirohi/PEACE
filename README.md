@@ -1,6 +1,6 @@
-# PEACE - **P**rocessing **E**ngine for **A**daptive **C**ontent **E**xtraction
+# Processing Engine for Adaptive Content Extraction (PEACE)
 
-**PEACE** is a Python-based automated video clipping tool designed to streamline the process of extracting highlights from videos. Whether you're a gamer looking to create montages, a content creator producing highlights, or simply someone who wants to save memorable moments, AutoClipping provides an efficient, easy-to-use solution.
+**PEACE** is a Python-based automated video clipping tool designed to streamline the process of extracting highlights from videos. Whether you're a gamer looking to create montages, a content creator producing highlights, or simply someone who wants to save memorable moments, **PEACE** provides an efficient, easy-to-use solution.
 
 ---
 
@@ -23,22 +23,18 @@
 
 ---
 
-# Script Documentation: Automated Kill Detection and Clipping
+# Script Documentation: PEACE
 
-## Overview
+# Overview
 
-This script automates the process of detecting kills in a gaming video, grouping timestamps,
-and extracting clips around those timestamps. It uses OpenCV for image processing, FFmpeg for
-video manipulation, and Python for data handling.
-
----
+This script automates the process of detecting kills in a gaming video, grouping timestamps, and extracting clips around those timestamps. It uses OpenCV for image processing, FFmpeg for video manipulation, and Python for data handling.
 
 ## Modules Used
 
 1. **os**: Handles file and directory operations.
 2. **cv2**: Used for image processing and template matching.
 3. **ffmpeg**: Executes video processing tasks like frame extraction and clipping.
-4. **ast**: Parses string representations of Python objects (e.g., converting list-like strings into lists).
+4. **ast**: Parses string representations of Python objects.
 5. **time**: Adds delays for certain operations to ensure proper execution.
 
 ---
@@ -65,7 +61,7 @@ video manipulation, and Python for data handling.
 - **Outputs**:
   - Saves cropped screenshots in a subfolder named `screenshots`.
 - **Details**:
-  - Captures 2 frames every 3 seconds using FFmpeg.
+  - Captures 2 frames every 3 seconds using FFmpeg (modifications are possible).
   - Crops a region of interest (ROI) to focus on the kill feed area.
 
 ### 3. `scanning(outputDir, start_time)`
@@ -117,7 +113,7 @@ video manipulation, and Python for data handling.
 
    - Execute the script and provide inputs when prompted:
      - Path to the input video.
-     - Start and end times for screenshotting.
+     - Start and end times (in seconds) for screenshotting.
    - The script will create a directory based on the video name and process the video.
 
 3. **Outputs**:
@@ -137,7 +133,7 @@ video manipulation, and Python for data handling.
 ## Customization
 
 - **Change Detection Threshold**: Modify the `max_val >= 0.75` condition in `scanning` to adjust sensitivity.
-- **Adjust Frame Extraction Rate**: Update the `fps1` variable in `screenshotting`.
+- **Adjust Frame Extraction Rate**: Update the `fps` variable in `screenshotting`.
 - **Change Time Buffer for Clipping**: Modify the `start_time - 5` and `end_time + 5` logic in `clipping`.
 
 ---
@@ -149,8 +145,9 @@ video manipulation, and Python for data handling.
 3. Start time: 60 seconds, End time: 300 seconds.
 4. Output structure:
    - `gameplay/screenshots`: Contains cropped frames.
-   - `gameplay/grouping.txt`: Lists kill groups (e.g., `[65, 70, 85]`).
+   - `gameplay/grouping.txt`: Lists kill groups.
    - `gameplay/clips`: Contains MP4 files for each group.
+   - Example:- `Group-1: [65, 70, 85]` Creates a clip from `65-5=60sec` to `85+5=90sec` from the original video.
 
 ---
 
