@@ -19,6 +19,8 @@
    ```bash
    git clone https://github.com/NakshatraSirohi/AutoClipping.git
    cd AutoClipping
+   pip install requirements.txt
+   python3 PEACE.py
    ```
 
 ---
@@ -39,6 +41,33 @@ This script automates the process of detecting kills in a gaming video, grouping
 
 ---
 
+## Folder Structure
+
+```
+AutoClipping/
+│
+├── PEACE.py                      # The main script
+├── KillFeed/                     # Folder containing kill feed template images
+│   └── kill_feed_template1.png   # Example kill feed template
+│   └── kill_feed_template2.png   # Example kill feed template
+│
+├── gameplay/                     # Output directory (named after input video)
+│   ├── screenshots/              # Folder containing extracted and cropped frames
+│   │   └── frame_00001.png       # Example screenshot
+│   │   └── frame_00002.png       # Example screenshot
+│   │   └── ...                   # More frames
+│   ├── grouping.txt              # File listing grouped kill timestamps
+│   │   └── [65, 70, 85]          # Example group
+│   ├── clips/                    # Folder containing extracted video clips
+│   │   └── gameplay_clip1.mp4    # Example clip
+│   │   └── gameplay_clip2.mp4    # Example clip
+│   │   └── ...                   # More clips
+│
+└── requirements.txt              # Required dependencies
+```
+
+---
+
 ## Function Descriptions
 
 ### 1. `createDir(input_video_path)`
@@ -48,7 +77,6 @@ This script automates the process of detecting kills in a gaming video, grouping
   - `input_video_path` (str): Full path to the input video.
 - **Outputs**:
   - Returns the path of the newly created directory.
-- **Logic**: If a directory with the same name already exists, appends a numerical suffix to create a unique name.
 
 ### 2. `screenshotting(input_path, outputDir, start_time, end_time)`
 
@@ -60,9 +88,6 @@ This script automates the process of detecting kills in a gaming video, grouping
   - `end_time` (int): End time for extracting screenshots (in seconds).
 - **Outputs**:
   - Saves cropped screenshots in a subfolder named `screenshots`.
-- **Details**:
-  - Captures 2 frames every 3 seconds using FFmpeg (modifications are possible).
-  - Crops a region of interest (ROI) to focus on the kill feed area.
 
 ### 3. `scanning(outputDir, start_time)`
 
@@ -73,9 +98,7 @@ This script automates the process of detecting kills in a gaming video, grouping
 - **Outputs**:
   - Returns a list of timestamps where kills were detected.
 - **Details**:
-  - Loads kill feed templates from a predefined folder (`KillFeed`).
-  - Uses OpenCV’s template matching to compare each screenshot with the templates.
-  - Records timestamps of matches with confidence ≥ 0.75.
+  - Loads kill feed templates from a predefined folder (`KillFeed`), which must be in the same directory as the script.
 
 ### 4. `timeGrouping(outputDir, input_time)`
 
@@ -85,8 +108,6 @@ This script automates the process of detecting kills in a gaming video, grouping
   - `input_time` (list): List of kill timestamps.
 - **Outputs**:
   - Saves grouped intervals to a file named `grouping.txt`.
-- **Details**:
-  - Iterates through the timestamps and groups them based on a 20-second threshold.
 
 ### 5. `clipping(outputDir, input_video_path)`
 
@@ -96,9 +117,6 @@ This script automates the process of detecting kills in a gaming video, grouping
   - `input_video_path` (str): Full path to the input video.
 - **Outputs**:
   - Saves clips in a subfolder named `clips`.
-- **Details**:
-  - Reads grouped intervals from `grouping.txt`.
-  - Clips 5 seconds before and after each group and saves them as MP4 files.
 
 ---
 
@@ -114,12 +132,24 @@ This script automates the process of detecting kills in a gaming video, grouping
    - Execute the script and provide inputs when prompted:
      - Path to the input video.
      - Start and end times (in seconds) for screenshotting.
-   - The script will create a directory based on the video name and process the video.
 
 3. **Outputs**:
+
    - `screenshots`: Folder containing extracted and cropped frames.
    - `grouping.txt`: File listing grouped kill timestamps.
    - `clips`: Folder containing video clips around kill events.
+   - All of the above will be created in the same directory as the script itself.
+
+4. **Example Workflow**:
+   - Input video: `gameplay.mp4`.
+   - Kill feed templates placed in `KillFeed` folder.
+   - Start time: 60 seconds, End time: 300 seconds.
+   - Output structure:
+     - `gameplay/screenshots`: Contains cropped frames.
+     - `gameplay/grouping.txt`: Lists kill groups.
+     - `gameplay/clips`: Contains MP4 files for each group.
+     - Example: If `Group-1` contains kill timestamps `[65, 70, 85]`:
+       - A clip will be created from `65 - 5 = 60 seconds` to `85 + 5 = 90 seconds` in the original video.
 
 ---
 
@@ -138,19 +168,6 @@ This script automates the process of detecting kills in a gaming video, grouping
 
 ---
 
-## Example Workflow
-
-1. Input video: `gameplay.mp4`.
-2. Kill feed templates placed in `KillFeed` folder.
-3. Start time: 60 seconds, End time: 300 seconds.
-4. Output structure:
-   - `gameplay/screenshots`: Contains cropped frames.
-   - `gameplay/grouping.txt`: Lists kill groups.
-   - `gameplay/clips`: Contains MP4 files for each group.
-   - Example:- `Group-1: [65, 70, 85]` Creates a clip from `65-5=60sec` to `85+5=90sec` from the original video.
-
----
-
 ## Dependencies
 
 - Python 3.x
@@ -163,4 +180,5 @@ This script automates the process of detecting kills in a gaming video, grouping
 ## Notes
 
 - Ensure FFmpeg is installed and accessible via the system PATH.
-- The script assumes the input video is in a supported format (e.g., MP4).
+- The `KillFeed` folder must be in the same directory as the script for proper functioning.
+- I'm actively working to enhance this script and add more features for better usability and performance.
