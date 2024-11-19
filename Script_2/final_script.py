@@ -1,6 +1,5 @@
 import os
 import cv2
-import numpy as np
 import ffmpeg
 import ast
 import time
@@ -70,12 +69,8 @@ def scanning(outputDir, start_time):
             print(f"Error: Could not open {filename}")
             continue
 
-        x = np.zeros_like(full_image)
-        y = cv2.rectangle(x, (80, 40), (365,235), (255, 255, 255), -1)
-        z = cv2.bitwise_and(full_image, y)
-
         for kill_img in kill_feed_images:
-            result = cv2.matchTemplate(z, kill_img, cv2.TM_CCOEFF_NORMED)
+            result = cv2.matchTemplate(full_image, kill_img, cv2.TM_CCOEFF_NORMED)
             max_val = cv2.minMaxLoc(result)[1]
 
             if max_val >= 0.75:
@@ -139,7 +134,6 @@ def clipping(outputDir, input_video_path):
             ffmpeg.input(input_video_path, ss=start_time, to=end_time).output(output_clip, codec='copy', an=None).run()
 
 
-#video_location = C:\\Users\\Nakshatra\\Downloads\\DAY60.mp4
 video_location = input("Enter video location: ")
 outputDir = createDir(video_location)
 
