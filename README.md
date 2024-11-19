@@ -20,7 +20,7 @@
    git clone https://github.com/NakshatraSirohi/AutoClipping.git
    cd AutoClipping
    pip install requirements.txt
-   python3 PEACE.py
+   python3 PEACE.py  # Presented inside one of the folders
    ```
 
 ---
