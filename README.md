@@ -17,10 +17,10 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/NakshatraSirohi/AutoClipping.git
-   cd AutoClipping
+   git clone https://github.com/NakshatraSirohi/PEACE.git
+   cd PEACE
    pip install requirements.txt
-   python3 PEACE.py  # Presented inside one of the folders
+   python3 PEACE.py
    ```
 
 ---
