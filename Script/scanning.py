@@ -1,7 +1,7 @@
 import os
 import cv2
 
-def scanning(outputDir, start_time, fps=1):
+def scanning(outputDir, start_time, fps="1"):
     """
     Scans the screenshots directory to detect 'kill feed' images and matches them
     with the screenshots. If a match is found, it calculates the adjusted kill time.

@@ -44,74 +44,57 @@ This script automates the process of detecting kills in a gaming video, grouping
 ## Folder Structure
 
 ```
-PEACE/
+AutoClipping/
 │
-├── Script/                            # The main script
-|   ├── KillFeed/                      # Folder containing kill feed template images
-│   |    └── kill_feed_template1.png   # Example kill feed template
-│   |    └── kill_feed_template2.png   # Example kill feed template
-|   ├── main.py
-|   ├── createDir.py
-|   ├── screenshotting.py
-|   ├── scanning.py
-|   ├── timeGrouping.py
-|   └── clipping.py
-|
-├── Test Sample/
-|   ├── Base_Directory/
-|   |   ├── screenshots/
-|   |   ├── clips/
-|   |   └── grouping.txt
-|   |
-|   ├── KillFeed/
-|   └── testVideo.mp4
-|
-└── requirements.txt                    # Required dependencies
-
-
-Base_Directory/               # Output directory (named after input video)
-├── screenshots/              # Folder containing extracted and cropped frames
-│   └── frame_00001.png       # Example screenshot
-│   └── frame_00002.png       # Example screenshot
-│   └── ...                   # More frames
-|
-├── clips/                    # Folder containing extracted video clips
-|   └── gameplay_clip1.mp4    # Example clip
-|   └── gameplay_clip2.mp4    # Example clip
-|   └── ...                   # More clips
-|
-└── grouping.txt              # File listing grouped kill timestamps
-
+├── PEACE.py                      # The main script
+├── KillFeed/                     # Folder containing kill feed template images
+│   └── kill_feed_template1.png   # Example kill feed template
+│   └── kill_feed_template2.png   # Example kill feed template
+│
+├── gameplay/                     # Output directory (named after input video)
+│   ├── screenshots/              # Folder containing extracted and cropped frames
+│   │   └── frame_00001.png       # Example screenshot
+│   │   └── frame_00002.png       # Example screenshot
+│   │   └── ...                   # More frames
+│   ├── grouping.txt              # File listing grouped kill timestamps
+│   │   └── [65, 70, 85]          # Example group
+│   ├── clips/                    # Folder containing extracted video clips
+│   │   └── gameplay_clip1.mp4    # Example clip
+│   │   └── gameplay_clip2.mp4    # Example clip
+│   │   └── ...                   # More clips
+│
+└── requirements.txt              # Required dependencies
 ```
 
 ---
 
 ## Function Descriptions
 
-### 1. `createDir()`
+### 1. `createDir(input_video_path)`
 
-- **Purpose**: Creates a unique directory based on the current timestamp for storing output files.
+- **Purpose**: Creates a unique directory based on the input video file name for storing output files.
 - **Inputs**:
-  - Nothing
+  - `input_video_path` (str): Full path to the input video.
 - **Outputs**:
   - Returns the path of the newly created directory.
 
-### 2. `screenshotting(original_video_location, outputDir)`
+### 2. `screenshotting(input_path, outputDir, start_time, end_time)`
 
 - **Purpose**: Extracts screenshots from the video at a defined interval, crops the kill feed area, and saves the frames.
 - **Inputs**:
-  - `original_video_location` (str): Full path to the input video.
+  - `input_path` (str): Full path to the input video.
   - `outputDir` (str): Directory where screenshots will be saved.
+  - `start_time` (int): Start time for extracting screenshots (in seconds).
+  - `end_time` (int): End time for extracting screenshots (in seconds).
 - **Outputs**:
-  - Saves the screenshots in a subfolder named `screenshots`.
+  - Saves cropped screenshots in a subfolder named `screenshots`.
 
-### 3. `scanning(outputDir, start_time, fps=1)`
+### 3. `scanning(outputDir, start_time)`
 
 - **Purpose**: Identifies timestamps of kills in the extracted screenshots using template matching.
 - **Inputs**:
   - `outputDir` (str): Directory containing the screenshots.
   - `start_time` (int): Starting time of the video to calculate absolute kill times.
-  - `fps="1"` (str): FPS at which the video was screenshotted.
 - **Outputs**:
   - Returns a list of timestamps where kills were detected.
 - **Details**:
@@ -126,12 +109,12 @@ Base_Directory/               # Output directory (named after input video)
 - **Outputs**:
   - Saves grouped intervals to a file named `grouping.txt`.
 
-### 5. `clipping(outputDir, original_video_location)`
+### 5. `clipping(outputDir, input_video_path)`
 
 - **Purpose**: Extracts video clips around the grouped kill timestamps.
 - **Inputs**:
   - `outputDir` (str): Directory containing grouping results.
-  - `original_video_location` (str): Full path to the input video.
+  - `input_video_path` (str): Full path to the input video.
 - **Outputs**:
   - Saves clips in a subfolder named `clips`.
 
@@ -148,14 +131,14 @@ Base_Directory/               # Output directory (named after input video)
 
    - Execute the script and provide inputs when prompted:
      - Path to the input video.
-     - Path to output directory.
+     - Start and end times (in seconds) for screenshotting.
 
 3. **Outputs**:
 
    - `screenshots`: Folder containing extracted and cropped frames.
    - `grouping.txt`: File listing grouped kill timestamps.
    - `clips`: Folder containing video clips around kill events.
-   - All of the above will be created in the base (output) directory.
+   - All of the above will be created in the same directory as the script itself.
 
 4. **Example Workflow**:
    - Input video: `gameplay.mp4`.
@@ -180,7 +163,8 @@ Base_Directory/               # Output directory (named after input video)
 ## Customization
 
 - **Change Detection Threshold**: Modify the `max_val >= 0.75` condition in `scanning` to adjust sensitivity.
-- **Change Time Buffer for Clipping**: Modify the `start_time - 5` and `end_time + 5` logic in `clipping.py`.
+- **Adjust Frame Extraction Rate**: Update the `fps` variable in `screenshotting`.
+- **Change Time Buffer for Clipping**: Modify the `start_time - 5` and `end_time + 5` logic in `clipping`.
 
 ---
 
