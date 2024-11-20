@@ -10,10 +10,10 @@ def main():
     outputDir = createDir.createDir()
 
     # Get tuple from screenshotting
-    tup = screenshotting.screenshotting(original_video_location, outputDir)
+    start_time, fps_str = screenshotting.screenshotting(original_video_location, outputDir)
 
     # Process scanning result
-    scanning_result = scanning.scanning(outputDir, tup[0], str(tup[1]))
+    scanning_result = scanning.scanning(outputDir, start_time, fps_str)
 
     # Group times
     timeGrouping.timeGrouping(outputDir, scanning_result)
