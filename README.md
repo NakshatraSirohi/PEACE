@@ -37,7 +37,7 @@ This script automates the process of detecting kills in a gaming video, grouping
 2. **cv2**: Used for image processing and template matching.
 3. **ffmpeg**: Executes video processing tasks like frame extraction and clipping.
 4. **ast**: Parses string representations of Python objects.
-5. **time**: Adds delays for certain operations to ensure proper execution.
+5. **datetime**: To get current datetime stamp for output folder.
 
 ---
 
