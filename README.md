@@ -13,19 +13,30 @@
 
 ---
 
-## Installation
+## Installation & Execution
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/NakshatraSirohi/PEACE.git
    cd PEACE
+   ```
+
+2. **Install the dependencies:**
+
+   ```bash
    pip install requirements.txt
-   python3 PEACE.py
+   ```
+
+3. **Run the script:**
+   ```bash
+   cd Script
+   python3 main.py
    ```
 
 ---
 
-# Script Documentation: PEACE
+# Script Documentation
 
 # Overview
 
