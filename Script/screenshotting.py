@@ -34,6 +34,7 @@ def screenshotting(original_video_location: str, outputDir: str) -> Tuple[int, s
     crop_height: Optional[int] = None
     crop_x: Optional[int] = None
     crop_y: Optional[int] = None
+    use_hwaccel = False
 
     # Prompt for custom settings
     if input("Want to set custom timing? (Yes/No): ").strip().lower() == "yes":
@@ -55,9 +56,13 @@ def screenshotting(original_video_location: str, outputDir: str) -> Tuple[int, s
         except ValueError:
             print("Invalid cropping input. Skipping cropping.")
 
+    # Check if the user want to use hardware acceleration (CUDA)
+    if input("Do you want to use hardware acceleration (CUDA)? (Yes/No): ").strip().lower() == "yes":
+        use_hwaccel = True
+
     try:
         # Prepare the ffmpeg input
-        ffmpeg_input_args: Dict[str: int] = {}
+        ffmpeg_input_args: Dict[str, int] = {}
         if start_time is not None:
             ffmpeg_input_args['ss'] = start_time
         if end_time is not None:
@@ -71,8 +76,13 @@ def screenshotting(original_video_location: str, outputDir: str) -> Tuple[int, s
         if (crop_width and crop_height and crop_x and crop_y):
             ffmpeg_input = ffmpeg_input.filter("crop", crop_width, crop_height, crop_x, crop_y)
 
+        # Conditionally add hardware acceleration if chosen
+        ffmpeg_output_args: Dict[str, str] = {}
+        if use_hwaccel:
+            ffmpeg_output_args['hwaccel'] = 'cuda'  # Set hardware acceleration to CUDA
+
         # Run ffmpeg to output screenshots
-        ffmpeg_input.output(os.path.join(screenshots_folder, 'frame_%05d.png'), an=None, sn=None).run()
+        ffmpeg_input.output(os.path.join(screenshots_folder, 'frame_%05d.png'), an=None, sn=None, **ffmpeg_output_args).run()
         print("Screenshots successfully generated!")
 
     except ffmpeg.Error as e:

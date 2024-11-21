@@ -78,41 +78,41 @@ This script automates the process of detecting kills in a gaming video, grouping
 ```
 PEACE/
 │
-├── Script/                            # The main script
-|   ├── KillFeed/                      # Folder containing kill feed template images
-│   |    └── kill_feed_template1.png   # Example kill feed template
-│   |    └── kill_feed_template2.png   # Example kill feed template
-|   ├── main.py
-|   ├── createDir.py
-|   ├── screenshotting.py
-|   ├── scanning.py
-|   ├── timeGrouping.py
-|   └── clipping.py
-|
-├── Test Sample/
-|   ├── Base_Directory/
-|   |   ├── screenshots/
-|   |   ├── clips/
-|   |   └── grouping.txt
+├── Script/                            # Core functionality scripts
+│   ├── KillFeed/                      # Directory with kill feed template images
+│   |    └── kill_feed_template1.png   # Template file
+|   │    └── ...                       # More templates
 |   |
-|   ├── KillFeed/
-|   └── testVideo.mp4
+│   ├── main.py                        # Main entry point for the script
+│   ├── createDir.py                   # Directory creation script
+│   ├── screenshotting.py              # Frame extraction and processing script
+│   ├── scanning.py                    # Kill detection via template matching
+│   ├── timeGrouping.py                # Timestamp grouping functionality
+│   └── clipping.py                    # Video clipping based on grouped timestamps
+│
+├── TestSample/                        # Sample data for testing and examples
+|   ├── BaseDirectory/                 # Base output directory for results
+|   |   ├── screenshots/               # Extracted frames from the video
+|   |   ├── clips/                     # Video clips created from the grouped timestamps
+|   |   └── grouping.txt               # File listing grouped timestamps
+|   |
+|   ├── KillFeed/                      # Folder with kill feed templates
+|   └── testVideo.mp4                  # Example test video
 |
-└── requirements.txt                    # Required dependencies
+└── requirements.txt                   # Python dependencies
 
-
-Base_Directory/               # Output directory (named after input video)
-├── screenshots/              # Folder containing extracted and cropped frames
-│   └── frame_00001.png       # Example screenshot
-│   └── frame_00002.png       # Example screenshot
-│   └── ...                   # More frames
+Base_Directory/                        # Output directory (named after input video)
+├── screenshots/                       # Folder containing extracted and cropped frames
+│   └── frame_00001.png                # Example screenshot
+│   └── frame_00002.png                # Example screenshot
+│   └── ...                            # More frames
 |
-├── clips/                    # Folder containing extracted video clips
-|   └── gameplay_clip1.mp4    # Example clip
-|   └── gameplay_clip2.mp4    # Example clip
-|   └── ...                   # More clips
+├── clips/                             # Folder containing extracted video clips
+|   └── gameplay_clip1.mp4             # Example clip
+|   └── gameplay_clip2.mp4             # Example clip
+|   └── ...                            # More clips
 |
-└── grouping.txt              # File listing grouped kill timestamps
+└── grouping.txt                       # File listing grouped kill timestamps
 
 ```
 
