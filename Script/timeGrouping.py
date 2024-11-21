@@ -1,4 +1,7 @@
-def timeGrouping(outputDir, input_time):
+import os
+from typing import List
+
+def timeGrouping(outputDir: str, input_time: List[int]) -> None:
     """
     Groups input time data based on a threshold (20 seconds) and writes the groups to a file.
     
@@ -11,14 +14,14 @@ def timeGrouping(outputDir, input_time):
     """
 
     # Define the path to the output file where grouped times will be saved.
-    output_file = f'{outputDir}\\grouping.txt'
+    output_file = os.path.join(outputDir, 'grouping.txt')
 
     # Initialize the list that will store all the time groups.
-    all_groups = []
+    all_groups: List[List[int]] = []
     
     # Start the first group with the first time in the input list.
-    current_group = [input_time[0]]
-    a = input_time[0]  # Store the first time for comparison.
+    current_group: List[int] = [input_time[0]]
+    a: int = input_time[0]  # Store the first time for comparison.
 
     # Iterate through the rest of the input time list to group times based on a threshold.
     for i in range(1, len(input_time)):

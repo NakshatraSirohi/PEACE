@@ -1,7 +1,8 @@
 import os
 import cv2
+from typing import List, Optional, Any
 
-def scanning(outputDir, start_time, fps="1"):
+def scanning(outputDir: str, start_time: int, fps: str="1") -> Optional[List[int]]:
     """
     Scans the screenshots directory to detect 'kill feed' images and matches them
     with the screenshots. If a match is found, it calculates the adjusted kill time.
@@ -17,12 +18,13 @@ def scanning(outputDir, start_time, fps="1"):
 
     try:
         if "/" in fps:
-            temp = fps.split("/")
+            temp: List[str] = fps.split("/")
             ss_speed = float(temp[1]) / float(temp[0])
         else:
             ss_speed = int(fps)
     except ValueError:
         print("Invalid fps. Please enter a valid fps value.")
+        return None
 
     # If no start time is provided, default it to 0
     start_time = start_time or 0
@@ -34,7 +36,7 @@ def scanning(outputDir, start_time, fps="1"):
     # Check if the screenshots folder exists
     if not os.path.exists(screenshots_folder_path):
         print(f"Error: Screenshots folder '{screenshots_folder_path}' not found.")
-        return []
+        return None
 
     # Initialize list to store the final calculated kill times
     output_time = []
@@ -45,7 +47,7 @@ def scanning(outputDir, start_time, fps="1"):
     # If no kill feed images are found, return early
     if not kill_feed_images:
         print("Error: No kill feed images found.")
-        return []
+        return None
 
     # Process each screenshot in the folder
     for filename in os.listdir(screenshots_folder_path):
@@ -69,7 +71,7 @@ def scanning(outputDir, start_time, fps="1"):
     return output_time
 
 
-def load_kill_feed_images(kill_feed_dir):
+def load_kill_feed_images(kill_feed_dir: str) -> Optional[List[str]]:
     """
     Loads all PNG images from the specified directory for kill feed pattern matching.
 
@@ -80,12 +82,12 @@ def load_kill_feed_images(kill_feed_dir):
         list: A list of loaded images.
     """
 
-    kill_feed_images = []
+    kill_feed_images: List[str] = []
 
     # Ensure the KillFeed directory exists
     if not os.path.exists(kill_feed_dir):
         print(f"Error: KillFeed directory '{kill_feed_dir}' not found.")
-        return kill_feed_images
+        return None
 
     # Load all PNG images from the KillFeed directory
     for img_name in os.listdir(kill_feed_dir):
@@ -100,7 +102,7 @@ def load_kill_feed_images(kill_feed_dir):
     return kill_feed_images
 
 
-def match_kill_feed(full_image, kill_feed_images, filename):
+def match_kill_feed(full_image: Any, kill_feed_images: List[str], filename: List[str]) -> Optional[int]:
     """
     Matches the screenshot with kill feed images using template matching.
 
@@ -122,7 +124,7 @@ def match_kill_feed(full_image, kill_feed_images, filename):
         if max_val >= 0.75:
             print(f"Match found in {filename} with kill feed image.")
             # Extract the kill time from the filename (assumed format: 'frame_<time>.png')
-            kill_time = filename.split('_')[1].split('.')[0]
+            kill_time = int(filename.split('_')[1].split('.')[0])
             return kill_time
 
     return None  # Return None if no match was found

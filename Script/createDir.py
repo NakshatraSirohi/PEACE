@@ -1,7 +1,8 @@
 import os
 from datetime import datetime
+from typing import Optional
 
-def createDir():
+def createDir() -> Optional[str]:
     """
     Creates a uniquely named directory based on the current timestamp.
     Users can choose between using the current working directory or a custom directory.
@@ -57,4 +58,4 @@ def createDir():
         return folder
     except OSError as e:
         print(f"Error: Could not create directory. {e}")
-        return
+        return None

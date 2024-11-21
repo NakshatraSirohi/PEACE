@@ -1,7 +1,8 @@
 import os
 import ffmpeg
+from typing import Tuple, Dict, Optional
 
-def screenshotting(original_video_location, outputDir):
+def screenshotting(original_video_location: str, outputDir: str) -> Tuple[int, str]:
     """
     Generate screenshots from a video file with optional user-defined parameters.
     
@@ -27,12 +28,12 @@ def screenshotting(original_video_location, outputDir):
 
     # Default values for parameters
     fps = '1'
-    start_time = None
-    end_time = None
-    crop_width = None
-    crop_height = None
-    crop_x = None
-    crop_y = None
+    start_time: Optional[int] = None
+    end_time: Optional[int] = None
+    crop_width: Optional[int] = None
+    crop_height: Optional[int] = None
+    crop_x: Optional[int] = None
+    crop_y: Optional[int] = None
 
     # Prompt for custom settings
     if input("Want to set custom timing? (Yes/No): ").strip().lower() == "yes":
@@ -56,7 +57,7 @@ def screenshotting(original_video_location, outputDir):
 
     try:
         # Prepare the ffmpeg input
-        ffmpeg_input_args = {}
+        ffmpeg_input_args: Dict[str: int] = {}
         if start_time is not None:
             ffmpeg_input_args['ss'] = start_time
         if end_time is not None:
@@ -67,7 +68,7 @@ def screenshotting(original_video_location, outputDir):
         # Apply filters based on user choices
         if fps:
             ffmpeg_input = ffmpeg_input.filter("fps", fps=fps)
-        if crop_width and crop_height and crop_x and crop_y:
+        if (crop_width and crop_height and crop_x and crop_y):
             ffmpeg_input = ffmpeg_input.filter("crop", crop_width, crop_height, crop_x, crop_y)
 
         # Run ffmpeg to output screenshots
@@ -79,4 +80,4 @@ def screenshotting(original_video_location, outputDir):
     except Exception as e:
         print(f"Unexpected error: {e}")
 
-    return (start_time, str(fps))
+    return start_time, str(fps)
