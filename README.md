@@ -44,11 +44,32 @@ This script automates the process of detecting kills in a gaming video, grouping
 
 ## Modules Used
 
-1. **os**: Handles file and directory operations.
-2. **cv2**: Used for image processing and template matching.
-3. **ffmpeg**: Executes video processing tasks like frame extraction and clipping.
-4. **ast**: Parses string representations of Python objects.
-5. **datetime**: To get current datetime stamp for output folder.
+1. **os**:
+   - **Purpose**: Used to handle file and directory operations.
+   - **Functions**: File path manipulation (`os.path()`), directory creation (`os.makedirs()`).
+2. **cv2 (OpenCV)**:
+
+   - **Purpose**: Used for image processing and template matching in frames extracted from video.
+   - **Functions**: Image reading, manipulation, and finding specific patterns or objects within images.
+
+3. **ffmpeg-python**:
+
+   - **Purpose**: A wrapper around the FFmpeg command-line tool for video processing tasks.
+   - **Functions**: Frame extraction, video clipping, conversion, and processing using the FFmpeg library.
+
+4. **ast**:
+
+   - **Purpose**: Safely parses string representations of Python objects into actual Python objects.
+   - **Functions**: `ast.literal_eval()` to convert string representations of Python lists back into actual Python objects.
+
+5. **datetime**:
+
+   - **Purpose**: Used to work with dates and times, particularly to generate current timestamp-based directory names or for time-based operations.
+   - **Functions**: Date and time formatting, and getting current date and time using `datetime.now()`.
+
+6. **time**:
+   - **Purpose**: Used for time-related tasks such as delays and performance measurements.
+   - **Functions**: `time.sleep()` for pausing execution.
 
 ---
 
@@ -137,7 +158,7 @@ Base_Directory/               # Output directory (named after input video)
 - **Outputs**:
   - Saves grouped intervals to a file named `grouping.txt`.
 
-### 5. `clipping(outputDir, original_video_location)`
+### 5. `clipping(original_video_location, outputDir)`
 
 - **Purpose**: Extracts video clips around the grouped kill timestamps.
 - **Inputs**:
@@ -200,7 +221,7 @@ Base_Directory/               # Output directory (named after input video)
 - Python 3.x
 - OpenCV (`cv2`)
 - FFmpeg library
-- Required Python modules (`os`, `time`, `ast`)
+- Required Python modules (`os`, `time`, `ast`, `datetime`, `typing`)
 
 ---
 
