@@ -46,7 +46,7 @@ This script automates the process of detecting kills in a gaming video, grouping
 
 1. **os**:
    - **Purpose**: Used to handle file and directory operations.
-   - **Functions**: File path manipulation (`os.path()`), directory creation (`os.makedirs()`).
+   - **Functions**: File path manipulation `os.path()`, directory creation `os.makedirs()`.
 2. **cv2 (OpenCV)**:
 
    - **Purpose**: Used for image processing and template matching in frames extracted from video.
@@ -122,50 +122,101 @@ Base_Directory/               # Output directory (named after input video)
 
 ### 1. `createDir()`
 
-- **Purpose**: Creates a unique directory based on the current timestamp for storing output files.
-- **Inputs**:
-  - Nothing
-- **Outputs**:
-  - Returns the path of the newly created directory.
+**Purpose**:  
+Creates a new directory for storing extracted frames, grouped timestamps, and video clips, named based on the current timestamp to ensure unique folder names.
+
+**Input**:
+
+- No direct inputs.
+
+**Output**:
+
+- A string representing the path to the newly created directory.
+
+---
 
 ### 2. `screenshotting(original_video_location, outputDir)`
 
-- **Purpose**: Extracts screenshots from the video at a defined interval, crops the kill feed area, and saves the frames.
-- **Inputs**:
-  - `original_video_location` (str): Full path to the input video.
-  - `outputDir` (str): Directory where screenshots will be saved.
-- **Outputs**:
-  - Saves the screenshots in a subfolder named `screenshots`.
+**Purpose**:  
+Extracts frames from the input video at specified intervals and crops the regions containing the kill feed (using template matching). These frames are saved for further analysis.
+
+**Input**:
+
+- `original_video_location` (str): Path to the input video.
+- `outputDir` (str): Directory where the frames will be saved.
+
+**Output**:
+
+- A series of cropped screenshots stored in the `screenshots/` subdirectory.
+
+**Details**:
+
+- The script extracts frames at a user-specified rate (e.g., once per second).
+- The frames are saved as PNG images in a folder named `screenshots` within the output directory.
+
+---
 
 ### 3. `scanning(outputDir, start_time, fps=1)`
 
-- **Purpose**: Identifies timestamps of kills in the extracted screenshots using template matching.
-- **Inputs**:
-  - `outputDir` (str): Directory containing the screenshots.
-  - `start_time` (int): Starting time of the video to calculate absolute kill times.
-  - `fps="1"` (str): FPS at which the video was screenshotted.
-- **Outputs**:
-  - Returns a list of timestamps where kills were detected.
-- **Details**:
-  - Loads kill feed templates from a predefined folder (`KillFeed`), which must be in the same directory as the script.
+**Purpose**:  
+Scans the extracted screenshots using template matching techniques to detect kill feed patterns in each frame. The timestamp of each detected kill is saved for further processing.
+
+**Input**:
+
+- `outputDir` (str): Directory containing the extracted screenshots.
+- `start_time` (int): The starting timestamp for the video (used to calculate absolute timestamps for kills).
+- `fps` (int, optional): The number of frames per second used during screenshot extraction. Default is 1.
+
+**Output**:
+
+- A list of timestamps (in seconds) representing kill events detected in the video.
+
+**Details**:
+
+- The function uses predefined template images from the `KillFeed/` directory to match and locate kill notifications in the frames.
+- The timestamps of matched templates are recorded and returned.
+
+---
 
 ### 4. `timeGrouping(outputDir, input_time)`
 
-- **Purpose**: Groups kill timestamps into intervals if they occur within 20 seconds of each other.
-- **Inputs**:
-  - `outputDir` (str): Directory for saving grouped intervals.
-  - `input_time` (list): List of kill timestamps.
-- **Outputs**:
-  - Saves grouped intervals to a file named `grouping.txt`.
+**Purpose**:  
+Groups detected kill timestamps into intervals if the timestamps are within a user-defined threshold (e.g., 20 seconds). This function is useful for creating highlight clips where consecutive kills occur within short intervals.
+
+**Input**:
+
+- `outputDir` (str): Directory to store the results of grouped timestamps.
+- `input_time` (list): List of individual kill timestamps to be grouped.
+
+**Output**:
+
+- A file named `grouping.txt` containing the grouped timestamps, where each group corresponds to a series of kills within a time interval.
+
+**Details**:
+
+- If two kills are detected within 20 seconds of each other, they are grouped together into a single highlight interval.
+- This helps in generating video clips around a sequence of kills.
+
+---
 
 ### 5. `clipping(original_video_location, outputDir)`
 
-- **Purpose**: Extracts video clips around the grouped kill timestamps.
-- **Inputs**:
-  - `outputDir` (str): Directory containing grouping results.
-  - `original_video_location` (str): Full path to the input video.
-- **Outputs**:
-  - Saves clips in a subfolder named `clips`.
+**Purpose**:  
+Clips the original video based on the grouped kill timestamps. Each clip is generated around a specific group of kills, with a defined buffer time before and after the kills to ensure smooth transitions.
+
+**Input**:
+
+- `original_video_location` (str): Path to the original video file.
+- `outputDir` (str): Directory containing the `grouping.txt` file with grouped timestamps.
+
+**Output**:
+
+- A series of video clips saved in a `clips/` subdirectory within the output directory.
+
+**Details**:
+
+- For each group of kill timestamps, the script extracts a video clip that includes a small buffer before the first kill and after the last kill, to ensure the clip contains enough context.
+- The clips are saved as `.mp4` files in the `clips/` subfolder.
 
 ---
 
@@ -184,9 +235,9 @@ Base_Directory/               # Output directory (named after input video)
 
 3. **Outputs**:
 
-   - `screenshots`: Folder containing extracted and cropped frames.
-   - `grouping.txt`: File listing grouped kill timestamps.
-   - `clips`: Folder containing video clips around kill events.
+   - **Screenshots**: Frames extracted from the video at specified intervals, stored in `screenshots/`.
+   - **Grouping File**: `grouping.txt` containing the grouped kill timestamps.
+   - **Clips**: Video clips based on the grouped timestamps, saved in `clips/`.
    - All of the above will be created in the base (output) directory.
 
 4. **Example Workflow**:
@@ -211,17 +262,19 @@ Base_Directory/               # Output directory (named after input video)
 
 ## Customization
 
-- **Change Detection Threshold**: Modify the `max_val >= 0.75` condition in `scanning` to adjust sensitivity.
-- **Change Time Buffer for Clipping**: Modify the `start_time - 5` and `end_time + 5` logic in `clipping.py`.
+- **Change Detection Threshold**: Modify the `max_val >= 0.75` condition in `scanning.py` script to adjust sensitivity.
+- **Change Time Buffer for Clipping**: Modify the `start_time - 5` and `end_time + 5` logic in `clipping.py` script.
 
 ---
 
 ## Dependencies
 
+The following Python modules are required to run the tool:
+
 - Python 3.x
 - OpenCV (`cv2`)
-- FFmpeg library
-- Required Python modules (`os`, `time`, `ast`, `datetime`, `typing`)
+- FFmpeg (video processing)
+- Required Python libraries: `os`, `time`, `ast`, `datetime`, `typing`
 
 ---
 
@@ -230,3 +283,11 @@ Base_Directory/               # Output directory (named after input video)
 - Ensure FFmpeg is installed and accessible via the system PATH.
 - The `KillFeed` folder must be in the same directory as the script for proper functioning.
 - I'm actively working to enhance this script and add more features for better usability and performance.
+
+## License
+
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
+
+## Contribution
+
+We welcome contributions! If you have suggestions for improvements or new features, feel free to fork the repository and submit a pull request.
