@@ -22,7 +22,7 @@ def main():
     timeGrouping.timeGrouping(outputDir, scanning_result)
 
     # Process clipping
-    clipping.clipping(outputDir, original_video_location)
+    clipping.clipping(original_video_location, outputDir)
 
 if __name__ == "__main__":
     main()

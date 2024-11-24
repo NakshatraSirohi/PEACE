@@ -20,7 +20,7 @@ def screenshotting(original_video_location: str, outputDir: str) -> Tuple[int, s
     # Create the folder if it doesn't already exist
     if not os.path.exists(screenshots_folder):
         os.makedirs(screenshots_folder)
-        print(f'Created: {screenshots_folder}')
+        print(f'Screenshots Folder Created: {screenshots_folder}')
     else:
         # If the folder exists, notify the user and exit the function
         print(f'Folder already exists: {screenshots_folder}... Please delete the folder first.')
@@ -67,6 +67,8 @@ def screenshotting(original_video_location: str, outputDir: str) -> Tuple[int, s
             ffmpeg_input_args['ss'] = start_time
         if end_time is not None:
             ffmpeg_input_args['to'] = end_time
+        if use_hwaccel:
+            ffmpeg_input_args['hwaccel'] = 'cuda'
 
         ffmpeg_input = ffmpeg.input(original_video_location, **ffmpeg_input_args)
 
@@ -76,13 +78,8 @@ def screenshotting(original_video_location: str, outputDir: str) -> Tuple[int, s
         if (crop_width and crop_height and crop_x and crop_y):
             ffmpeg_input = ffmpeg_input.filter("crop", crop_width, crop_height, crop_x, crop_y)
 
-        # Conditionally add hardware acceleration if chosen
-        ffmpeg_output_args: Dict[str, str] = {}
-        if use_hwaccel:
-            ffmpeg_output_args['hwaccel'] = 'cuda'  # Set hardware acceleration to CUDA
-
         # Run ffmpeg to output screenshots
-        ffmpeg_input.output(os.path.join(screenshots_folder, 'frame_%05d.png'), an=None, sn=None, **ffmpeg_output_args).run()
+        ffmpeg_input.output(os.path.join(screenshots_folder, 'frame_%05d.png'), an=None, sn=None).run()
         print("Screenshots successfully generated!")
 
     except ffmpeg.Error as e:

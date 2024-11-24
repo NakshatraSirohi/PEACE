@@ -4,7 +4,7 @@ import ast
 import time
 from typing import List
 
-def clipping( original_video_location: str, outputDir: str) -> None:
+def clipping(original_video_location: str, outputDir: str) -> None:
     """
     This function creates clips from the input video based on the killshot times specified
     in a 'grouping.txt' file. Each clip is extracted with a 5-second buffer before and after
@@ -21,16 +21,16 @@ def clipping( original_video_location: str, outputDir: str) -> None:
 
     # Define the directory where clips will be stored
     clip_folder = "clips"
-    folder_path = os.path.join(outputDir, clip_folder)
+    clips_folder_path = os.path.join(outputDir, clip_folder)
 
     # Create the folder if it doesn't already exist
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-        print(f'Created: {folder_path}')
+    if not os.path.exists(clips_folder_path):
+        os.makedirs(clips_folder_path)
+        print(f'Clips Folder Created: {clips_folder_path}')
         time.sleep(1)  # Adding a small delay
     else:
         # If the folder exists, notify the user and exit the function
-        print(f'Folder already exists: {folder_path}... Please delete the folder first.')
+        print(f'Folder already exists: {clips_folder_path}... Please delete the folder first.')
         return None
 
     # Set the default ffmpeg output args to disable all streams except video (which is copied)
@@ -67,7 +67,7 @@ def clipping( original_video_location: str, outputDir: str) -> None:
                     end_time: int = killshot_time[-1] + 5
 
                     # Define the output clip filename
-                    output_clip = os.path.join(folder_path, f'{file_name}_clip{count}.mp4')
+                    output_clip = os.path.join(clips_folder_path, f'{file_name}_clip{count}.mp4')
                     count += 1  # Increment the clip count
 
                     # Executes ffmpeg command to extract the clip from the original video
