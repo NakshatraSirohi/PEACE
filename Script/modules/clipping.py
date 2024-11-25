@@ -4,7 +4,7 @@ import ast
 import time
 from typing import List
 
-def clipping(original_video_location: str, outputDir: str) -> None:
+def clipping(video_location: str, outputDir: str) -> None:
     """
     This function creates clips from the input video based on the killshot times specified
     in a 'grouping.txt' file. Each clip is extracted with a 5-second buffer before and after
@@ -12,12 +12,12 @@ def clipping(original_video_location: str, outputDir: str) -> None:
     
     Args:
         outputDir (str): The directory where the output clips will be saved.
-        original_video_location (str): Path to the original video file.
+        video_location (str): Path to the original video file.
     """
 
     # Extract the file name (without extension) from the original video location
-    file_path: str = os.path.basename(original_video_location)
-    file_name: str = os.path.splitext(file_path)[0]
+    video_basename: str = os.path.basename(video_location)
+    filename: str = os.path.splitext(video_basename)[0]
 
     # Define the directory where clips will be stored
     clip_folder = "clips"
@@ -36,6 +36,7 @@ def clipping(original_video_location: str, outputDir: str) -> None:
     # Set the default ffmpeg output args to disable all streams except video (which is copied)
     ffmpeg_output_args = {'an': None, 'sn': None}
 
+    # Ask the user if they want to disable audio or subtitle streams
     if input("Want to disable audio stream in output clips (Yes/No): ").strip().lower() == "no":
         # Enable audio if user chooses not to disable it
         ffmpeg_output_args.pop('an', None)
@@ -67,11 +68,11 @@ def clipping(original_video_location: str, outputDir: str) -> None:
                     end_time: int = killshot_time[-1] + 5
 
                     # Define the output clip filename
-                    output_clip = os.path.join(clips_folder_path, f'{file_name}_clip{count}.mp4')
+                    output_clip = os.path.join(clips_folder_path, f'{filename}_clip{count}.mp4')
                     count += 1  # Increment the clip count
 
                     # Executes ffmpeg command to extract the clip from the original video
-                    ffmpeg.input(original_video_location, ss=start_time, to=end_time) \
+                    ffmpeg.input(video_location, ss=start_time, to=end_time) \
                         .output(output_clip, codec='copy', **ffmpeg_output_args).run()
                     
                 else:
@@ -80,3 +81,5 @@ def clipping(original_video_location: str, outputDir: str) -> None:
             except Exception as e:
                 print(f"Error processing line {line}: {e}")
                 continue
+
+    print("Clipping process completed.")

@@ -1,8 +1,9 @@
 import os
 import cv2
+from fractions import Fraction
 from typing import List, Optional, Any
 
-def scanning(outputDir: str, start_time: int, fps: str="1") -> Optional[List[int]]:
+def scanning(outputDir: str, start_time: int, fps: str = "1") -> Optional[List[int]]:
     """
     Scans the screenshots directory to detect 'kill feed' images and matches them
     with the screenshots. If a match is found, it calculates the adjusted kill time.
@@ -10,21 +11,21 @@ def scanning(outputDir: str, start_time: int, fps: str="1") -> Optional[List[int
     Args:
         outputDir (str): The directory where the screenshots are located.
         start_time (int): The start time to offset the kill event times.
-        fps (str): The FPS to adjust the kill timing according to original video.
-    
+        fps (str): The FPS to adjust the kill timing according to the original video.
+
     Returns:
         list: A list of adjusted kill times based on the screenshots and detected kills.
     """
 
     try:
-        if "/" in fps:
-            temp: List[str] = fps.split("/")
-            ss_speed = float(temp[1]) / float(temp[0])
+        # Handle fractional or integer FPS values
+        if '/' in fps:
+            ss_speed = float(Fraction(fps[::-1]))
         else:
-            ss_speed = int(fps)
+            ss_speed = float(Fraction(fps))
     except ValueError:
-        print("Invalid fps. Please enter a valid fps value.")
-        return None
+        print("Invalid FPS format. Please enter a valid FPS (e.g., '30' or '2/3').")
+        ss_speed = 1.0  # Fallback default value
 
     # If no start time is provided, default it to 0
     start_time = start_time or 0
@@ -42,7 +43,11 @@ def scanning(outputDir: str, start_time: int, fps: str="1") -> Optional[List[int
     output_time = []
 
     # Load kill feed images for pattern matching
-    kill_feed_images = load_kill_feed_images('KillFeed')
+    current_script_directory = os.path.dirname(os.path.abspath(__file__))
+    parent_directory = os.path.dirname(current_script_directory)
+    killFeed_directory = os.path.join(parent_directory, 'KillFeed')
+    
+    kill_feed_images = load_kill_feed_images(killFeed_directory)
 
     # If no kill feed images are found, return early
     if not kill_feed_images:
@@ -71,7 +76,7 @@ def scanning(outputDir: str, start_time: int, fps: str="1") -> Optional[List[int
     return output_time
 
 
-def load_kill_feed_images(kill_feed_dir: str) -> Optional[List[str]]:
+def load_kill_feed_images(kill_feed_dir: str) -> Optional[List[Any]]:
     """
     Loads all PNG images from the specified directory for kill feed pattern matching.
 
@@ -82,7 +87,7 @@ def load_kill_feed_images(kill_feed_dir: str) -> Optional[List[str]]:
         list: A list of loaded images.
     """
 
-    kill_feed_images: List[str] = []
+    kill_feed_images: List[Any] = []
 
     # Ensure the KillFeed directory exists
     if not os.path.exists(kill_feed_dir):
@@ -102,7 +107,7 @@ def load_kill_feed_images(kill_feed_dir: str) -> Optional[List[str]]:
     return kill_feed_images
 
 
-def match_kill_feed(full_image: Any, kill_feed_images: List[str], filename: List[str]) -> Optional[int]:
+def match_kill_feed(full_image: Any, kill_feed_images: List[Any], filename: str) -> Optional[int]:
     """
     Matches the screenshot with kill feed images using template matching.
 
@@ -112,9 +117,9 @@ def match_kill_feed(full_image: Any, kill_feed_images: List[str], filename: List
         filename (str): The name of the screenshot file for logging.
 
     Returns:
-        str or None: The kill time extracted from the filename if a match is found, else None.
+        int or None: The kill time extracted from the filename if a match is found, else None.
     """
-    
+
     for kill_img in kill_feed_images:
         # Perform template matching between the screenshot and kill feed image
         result = cv2.matchTemplate(full_image, kill_img, cv2.TM_CCOEFF_NORMED)
@@ -123,8 +128,12 @@ def match_kill_feed(full_image: Any, kill_feed_images: List[str], filename: List
         # If the match quality exceeds the threshold (0.75), it's considered a kill
         if max_val >= 0.75:
             print(f"Match found in {filename} with kill feed image.")
-            # Extract the kill time from the filename (assumed format: 'frame_<time>.png')
-            kill_time = int(filename.split('_')[1].split('.')[0])
-            return kill_time
+            # Safely extract the kill time from the filename
+            try:
+                kill_time = int(filename.split('_')[1].split('.')[0])
+                return kill_time
+            except (IndexError, ValueError):
+                print(f"Error: Unable to extract kill time from filename '{filename}'.")
+                return None
 
-    return None  # Return None if no match was found
+    return None
