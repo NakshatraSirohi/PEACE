@@ -1,10 +1,10 @@
 import os
 from typing import List, Optional
-import Script.modules.createDir as createDir
-import Script.modules.screenshotting as screenshotting
-import Script.modules.scanning as scanning
-import Script.modules.timeGrouping as timeGrouping
-import Script.modules.clipping as clipping
+import script.modules.createDir as createDir
+import script.modules.screenshotting as screenshotting
+import script.modules.scanning as scanning
+import script.modules.timeGrouping as timeGrouping
+import script.modules.clipping as clipping
 
 def directory() -> Optional[bool]:
     base_directory = None
