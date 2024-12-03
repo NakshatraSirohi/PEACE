@@ -14,7 +14,7 @@ def createDir(base_directory: Optional[str], use_current_dir: bool) -> Optional[
     Returns:
         str: The path of the created directory, or None if creation failed.
     """
-    
+
     # Generate a timestamp for the folder name
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 

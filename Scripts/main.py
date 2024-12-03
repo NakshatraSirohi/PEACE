@@ -1,10 +1,12 @@
 import os
 from typing import List, Optional
-import Scripts.modules.createDir as createDir
-import Scripts.modules.screenshotting as screenshotting
-import Scripts.modules.scanning as scanning
-import Scripts.modules.timeGrouping as timeGrouping
-import Scripts.modules.clipping as clipping
+import modules.createDir as createDir
+import modules.screenshotting as screenshotting
+import modules.scanning as scanning
+import modules.timeGrouping as timeGrouping
+import modules.clipping as clipping
+
+# C:\\Users\\Nakshatra\\Downloads\\testvideo.mp4
 
 def directory() -> Optional[bool]:
     base_directory = None
