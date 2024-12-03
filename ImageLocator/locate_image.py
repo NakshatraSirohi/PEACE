@@ -3,7 +3,6 @@ import time
 import os
 from typing import Optional, Tuple
 
-
 def locate_image(target_path: str, search_path: str, confidence_level: float) -> Optional[Tuple[int, int, int, int]]:
     """
     Locate the position of a target image within another image using image matching.
@@ -36,7 +35,6 @@ def locate_image(target_path: str, search_path: str, confidence_level: float) ->
     except Exception as e:
         print(f"Unexpected error: {e}")
         return None
-
 
 def main() -> None:
     """

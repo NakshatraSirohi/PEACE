@@ -46,7 +46,7 @@ def scanning(outputDir: str, start_time: int, fps: str = "1") -> Optional[List[i
     current_script_directory = os.path.dirname(os.path.abspath(__file__))
     parent_directory = os.path.dirname(current_script_directory)
     killFeed_directory = os.path.join(parent_directory, 'KillFeed')
-    
+
     kill_feed_images = load_kill_feed_images(killFeed_directory)
 
     # If no kill feed images are found, return early

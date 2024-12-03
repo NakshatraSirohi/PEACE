@@ -6,8 +6,6 @@ import modules.scanning as scanning
 import modules.timeGrouping as timeGrouping
 import modules.clipping as clipping
 
-# C:\\Users\\Nakshatra\\Downloads\\testvideo.mp4
-
 def directory() -> Optional[bool]:
     base_directory = None
     use_current_dir = True
@@ -40,6 +38,7 @@ def directory() -> Optional[bool]:
     return base_directory, use_current_dir
 
 def main() -> None:
+    # Path Example >> C:\\Users\\Nakshatra\\Music\\testvideo.mp4
     # Get video location and output directory
     video_location = input("Enter video location: ")
 
