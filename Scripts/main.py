@@ -1,10 +1,10 @@
 import os
 from typing import List, Optional
-import script.modules.createDir as createDir
-import script.modules.screenshotting as screenshotting
-import script.modules.scanning as scanning
-import script.modules.timeGrouping as timeGrouping
-import script.modules.clipping as clipping
+import Scripts.modules.createDir as createDir
+import Scripts.modules.screenshotting as screenshotting
+import Scripts.modules.scanning as scanning
+import Scripts.modules.timeGrouping as timeGrouping
+import Scripts.modules.clipping as clipping
 
 def directory() -> Optional[bool]:
     base_directory = None
@@ -17,7 +17,7 @@ def directory() -> Optional[bool]:
             break
         except ValueError as e:
             print(e)
-    
+
     # Determine the base directory based on user input.
     if choice == 1:
         # Get the custom directory path from the user.
@@ -30,7 +30,7 @@ def directory() -> Optional[bool]:
         if not os.access(base_directory, os.W_OK):
             print(f"Error: The directory '{base_directory}' is not writable.")
             return None
-        
+
         use_current_dir = False  # Custom directory, use_current_dir should be False.
     else:
         pass
@@ -40,12 +40,12 @@ def directory() -> Optional[bool]:
 def main() -> None:
     # Get video location and output directory
     video_location = input("Enter video location: ")
-    
+
     # Validate that the video file exists
     if not os.path.exists(video_location):
         print(f"Error: The file at {video_location} does not exist.")
         return None
-    
+
     # Create the output directory
     base_directory, use_current_dir = directory()
     outputDir: str = createDir.createDir(base_directory, use_current_dir)
