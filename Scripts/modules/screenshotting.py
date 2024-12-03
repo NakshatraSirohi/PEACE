@@ -5,15 +5,15 @@ from typing import Tuple, Dict, Optional
 def screenshotting(video_location: str, outputDir: str) -> Tuple[Optional[int], str]:
     """
     Generate screenshots from a video file with optional user-defined parameters.
-    
+
     Args:
         video_location (str): Path to the input video file.
         outputDir (str): Directory where the screenshots will be saved.
-    
+
     Returns:
         Tuple[Optional[int], str]: Tuple containing the user-defined video start time and fps.
     """
-    
+
     folderName = "screenshots"
     screenshots_folder = os.path.join(outputDir, folderName)
 
