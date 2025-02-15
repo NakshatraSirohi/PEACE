@@ -3,6 +3,11 @@ import time
 import os
 from typing import Optional, Tuple
 
+# crop_x = 1415
+# crop_y = 74
+# crop_width = 364
+# crop_height = 183
+
 def locate_image(target_path: str, search_path: str, confidence_level: float) -> Optional[Tuple[int, int, int, int]]:
     """
     Locate the position of a target image within another image using image matching.
@@ -53,8 +58,8 @@ def main() -> None:
     current_directory = os.path.dirname(os.path.abspath(__file__))
 
     # Hardcoded filenames for the target and search images
-    target_filename = 'ss2.jpg'     # Cropped image to locate
-    search_filename = 'ss1.jpg'     # Full image to search within
+    target_filename = 'a2.jpg'     # Cropped image to locate
+    search_filename = 'a1.jpg'     # Full image to search within
 
     # Construct full paths to the images
     target_path = os.path.join(current_directory, target_filename)

@@ -30,7 +30,7 @@ def screenshotting(video_location: str, outputDir: str) -> Tuple[Optional[int], 
     start_time = None
     end_time = None
     crop_params = None
-    use_hwaccel = False
+    use_hwaccel = True
 
     # User prompts for custom settings
     if input("Set custom timing? (Yes/No): ").strip().lower() == "yes":
@@ -45,16 +45,13 @@ def screenshotting(video_location: str, outputDir: str) -> Tuple[Optional[int], 
 
     if input("Crop video? (Yes/No): ").strip().lower() == "yes":
         try:
-            crop_width = int(input("Enter crop width: ").strip())
-            crop_height = int(input("Enter crop height: ").strip())
-            crop_x = int(input("Enter crop X offset: ").strip())
-            crop_y = int(input("Enter crop Y offset: ").strip())
+            crop_width = 364
+            crop_height = 183
+            crop_x = 1415
+            crop_y = 74
             crop_params = (crop_width, crop_height, crop_x, crop_y)
         except ValueError:
             print("Invalid cropping input. Skipping cropping.")
-
-    if input("Use hardware acceleration (CUDA)? (Yes/No): ").strip().lower() == "yes":
-        use_hwaccel = True
 
     try:
         # Prepare ffmpeg input arguments

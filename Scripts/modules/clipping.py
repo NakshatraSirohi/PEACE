@@ -9,7 +9,7 @@ def clipping(video_location: str, outputDir: str) -> None:
     This function creates clips from the input video based on the killshot times specified
     in a 'grouping.txt' file. Each clip is extracted with a 5-second buffer before and after
     each killshot time.
-    
+
     Args:
         outputDir (str): The directory where the output clips will be saved.
         video_location (str): Path to the original video file.
@@ -54,7 +54,7 @@ def clipping(video_location: str, outputDir: str) -> None:
     # Open the grouping.txt file where the killshot times are stored
     with open(input_file, 'r') as input_file:
         count = 1  # Initialize the clip count
-        
+
         # Iterate through each line in the grouping file (each group of killshot times)
         for line in input_file:
             try:
@@ -64,8 +64,8 @@ def clipping(video_location: str, outputDir: str) -> None:
                 # Ensuring the list is not empty before calculating start and end times
                 if killshot_time:
                     # Calculate the start and end times for the clip (5 seconds before and after killshot)
-                    start_time: int = killshot_time[0] - 5
-                    end_time: int = killshot_time[-1] + 5
+                    start_time: int = killshot_time[0] - 10
+                    end_time: int = killshot_time[-1] + 10
 
                     # Define the output clip filename
                     output_clip = os.path.join(clips_folder_path, f'{filename}_clip{count}.mp4')
@@ -74,10 +74,10 @@ def clipping(video_location: str, outputDir: str) -> None:
                     # Executes ffmpeg command to extract the clip from the original video
                     ffmpeg.input(video_location, ss=start_time, to=end_time) \
                         .output(output_clip, codec='copy', **ffmpeg_output_args).run()
-                    
+
                 else:
                     print("Error: Killshot timing group in text file is empty.")
-            
+
             except Exception as e:
                 print(f"Error processing line {line}: {e}")
                 continue
